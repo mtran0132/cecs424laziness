@@ -11,7 +11,7 @@ public class Demo {
            System.out.println(i);
        }
 
-      for (Double i : new FilterGenerator<Double> (i -> i < 5 ,
+      for (Double i : new TakeWhileGenerator<Double> (i -> i < 5 ,
                             new SkipGenerator <Double>(2 ,
                                 new MapGenerator<Integer, Double>(i -> Math.sqrt(i),
                                         new FilterGenerator<Integer>(i -> i % 2 == 1, arrayList))))){
