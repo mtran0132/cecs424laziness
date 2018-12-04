@@ -4,35 +4,39 @@ import java.util.function.Predicate;
 public class TakeWhileGenerator <T> implements Iterable <T> {
     private Iterable <T> mSource ; // the sequence to skip values from
     private Predicate<T> mPred;     // Predicate
-    private int skipAmount ; // The number of values to skip
     public TakeWhileGenerator (Predicate<T> pred, Iterable <T> source) {
         mPred = pred;
         mSource = source;
     }
+
     public Iterator <T > iterator() {
-        return new SkipIterator();
+        return new takeWhileIterator();
     }
-    private class SkipIterator implements Iterator <T > {
-        private int iterSkipAmount;
+    private class takeWhileIterator implements Iterator <T > {
+
         // To allow multiple SkipIterators to walk over the same source , we request a unique
         // source iterator for each SkipIterator.
         private Iterator<T> iterator ;
+        private Predicate predicate;
+        private boolean keepTaking;
+        private T currentValue;
 
-        public SkipIterator() {
-            iterSkipAmount = skipAmount ;
+        public takeWhileIterator() {
+            predicate = mPred;
             iterator = mSource.iterator();
+            keepTaking = true;
         }
 
         public boolean hasNext () {
-            while(iterSkipAmount > 0){
-                --iterSkipAmount;
-                iterator.next();
+            currentValue = iterator.next();
+            if(!predicate.test(currentValue)){
+                keepTaking = false;
             }
-            return iterSkipAmount == 0 && iterator.hasNext();
+            return keepTaking && iterator.hasNext();
         }
 
         public T next () {
-            return iterator.next();
+            return currentValue;
         }
     }
 }
