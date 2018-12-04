@@ -13,6 +13,9 @@ public class Demo {
 //           System.out.println (i);
 //       }
 
+       for (Integer i : new MapGenerator<Integer, Integer>(i -> i*i, new RangeGenerator(1 , 100, 1))){
+           System.out.println (i);
 
+       }
    }
 }

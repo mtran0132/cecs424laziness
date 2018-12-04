@@ -1,54 +1,43 @@
 import java.util.Iterator;
-import java.util.function.Predicate;
 
-public class MapGenerator <T> implements Iterable <T> {
-   private Iterable <T> mSource ; // the sequence to skip values from
-   private Predicate<T> mPred;     // Predicate
-   private T mNext;
+public class MapGenerator <TIn, TOut> implements Iterable <TOut> {
+   private MapFunction<TIn, TOut> mTransform;
+   private Iterable <TIn> mSource ;
 
-   public MapGenerator (Tran, Iterable <T> source) {
-      mPred = pred;
+   public MapGenerator (MapFunction<TIn, TOut> transformer, Iterable <TIn> source) {
+      mTransform = transformer;
       mSource = source;
    }
 
-   public Iterator <T > iterator() {
+   public Iterator <TOut> iterator() {
       return new MapIterator();
    }
 
-
-   private class MapIterator implements Iterator <T > {
+   private class MapIterator implements Iterator <TOut> {
 
       // To allow multiple MapIterators to walk over the same source , we request a unique
       // source iterator for each MapIterator.
-      private Iterator<T> iterator ;
-      private Predicate predicate;
-      private T currentValue;
+      private Iterator<TIn> iterator ;
+      private MapFunction transformer;
 
 
       public MapIterator() {
-         predicate = mPred;
+         transformer = mTransform;
          iterator = mSource.iterator();
-         mNext = findNext();
-      }
-
-      private T findNext(){
-         while(iterator.hasNext()){
-            T temp = iterator.next();
-            if(predicate.test(temp)){
-               return temp;
-            }
-         }
-         return null;
       }
 
       public boolean hasNext () {
-         return mNext != null;
+         return iterator.hasNext();
       }
 
-      public T next () {
-         T temp = mNext;
-         mNext = findNext();
-         return temp;
+      public TOut next () {
+         return mapNext();
+      }
+
+      private TOut mapNext(){
+         TIn next = iterator.next();
+         TOut transformed = mTransform.transform(next);
+         return transformed;
       }
    }
 }
