@@ -14,9 +14,8 @@ public class FilterGenerator <T> implements Iterable <T> {
    public Iterator <T > iterator() {
       return new FilterIterator();
    }
+   private class FilterIterator implements Iterator <T> {
 
-
-   private class FilterIterator implements Iterator <T > {
 
       // To allow multiple FilterIterators to walk over the same source , we request a unique
       // source iterator for each FilterIterator.
@@ -24,32 +23,25 @@ public class FilterGenerator <T> implements Iterable <T> {
       private Predicate predicate;
       private T currentValue;
 
-
       public FilterIterator() {
          predicate = mPred;
          iterator = mSource.iterator();
-         mNext = findNext();
       }
 
-      private T findNext(){
-         while(iterator.hasNext()){
-            T temp = iterator.next();
-            if(predicate.test(temp)){
-               return temp;
+      public boolean hasNext() {
+         while (iterator.hasNext()) {
+            mNext = iterator.next();
+            if (predicate.test(mNext)) {
+               return true;
             }
          }
-         return null;
+         return iterator.hasNext();
       }
 
-      public boolean hasNext () {
-         return mNext != null;
+      public T next() {
+         return mNext;
       }
 
-      public T next () {
-         T temp = mNext;
-         mNext = findNext();
-         return temp;
-      }
    }
 }
 

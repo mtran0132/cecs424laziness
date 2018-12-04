@@ -28,9 +28,3 @@ public class TakeGenerator <T > implements Iterable <T > {
         }
     }
 }
-
-
-/*
-for ( Integer i : new TakeGenerator < Integer >(3 , new RangeGenerator (1 , 100000 , 5))) {
-        System . out . println ( i );
-        }*/

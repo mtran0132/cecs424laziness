@@ -24,7 +24,9 @@ public class SkipGenerator <T> implements Iterable <T> {
         public boolean hasNext () {
             while(iterSkipAmount > 0){
                 --iterSkipAmount;
-                iterator.next();
+                if(iterator.hasNext()){
+                    iterator.next();
+                }
             }
             return iterSkipAmount == 0 && iterator.hasNext();
         }
@@ -34,4 +36,3 @@ public class SkipGenerator <T> implements Iterable <T> {
         }
     }
 }
-
