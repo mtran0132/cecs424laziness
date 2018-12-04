@@ -18,11 +18,8 @@ public class MapGenerator <TIn, TOut> implements Iterable <TOut> {
       // To allow multiple MapIterators to walk over the same source , we request a unique
       // source iterator for each MapIterator.
       private Iterator<TIn> iterator ;
-      private MapFunction transformer;
-
 
       public MapIterator() {
-         transformer = mTransform;
          iterator = mSource.iterator();
       }
 

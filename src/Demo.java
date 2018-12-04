@@ -1,21 +1,22 @@
+import java.util.ArrayList;
+
 public class Demo {
    public static void main(String[] args) {
-//      for (Integer i : new SkipGenerator <Integer>(3 , new RangeGenerator (1, 100000, 1))) {
-//         System.out.println (i);
-//      }
-
-//      for (Integer i : new TakeWhileGenerator<Integer>(i -> i < 20 || i > 100 && i <115, new RangeGenerator(1 , 1000, 5))){
-//         System.out.println (i);
-//      }
-
-//
-//       for (Integer i : new FilterGenerator<Integer>(i -> i < 15 && i > 10 , new RangeGenerator(1 , 100, 1))){
-//           System.out.println (i);
-//       }
-
-       for (Integer i : new MapGenerator<Integer, Integer>(i -> i*i, new RangeGenerator(1 , 100, 1))){
-           System.out.println (i);
-
+       ArrayList<Integer> arrayList = new ArrayList<>();
+       for(int i = 1; i <=1000; i++){
+           arrayList.add(i);
        }
+
+       for(Integer i : new RangeGenerator(1,1001,1)){
+           System.out.println(i);
+       }
+
+      for (Double i : new FilterGenerator<Double> (i -> i < 5 ,
+                            new SkipGenerator <Double>(2 ,
+                                new MapGenerator<Integer, Double>(i -> Math.sqrt(i),
+                                        new FilterGenerator<Integer>(i -> i % 2 == 1, arrayList))))){
+         System.out.println (i);
+      }
+
    }
 }
